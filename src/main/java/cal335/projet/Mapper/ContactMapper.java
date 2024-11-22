@@ -3,6 +3,8 @@ package cal335.projet.Mapper;
 import cal335.projet.DTO.ContactDTO;
 import cal335.projet.Modele.Contact;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ContactMapper {
@@ -12,9 +14,6 @@ public class ContactMapper {
         dto.setNom(contact.getNom());
         dto.setPrenom(contact.getPrenom());
         dto.setFavoris(contact.isFavoris());
-        if (contact.getAdresses() != null) {
-
-        }
         return dto;
     }
 
@@ -30,5 +29,21 @@ public class ContactMapper {
 //                    .collect(Collectors.toList()));
         }
         return contact;
+    }
+
+    public static List<ContactDTO> toDTO(List<Contact> contacts) {
+        List<ContactDTO> ListcontactsDTOs = new ArrayList<>();
+        for (Contact contact : contacts) {
+            ListcontactsDTOs.add(toDTO(contact));
+        }
+        return ListcontactsDTOs;
+    }
+
+    public static List<Contact> toEntity(List<ContactDTO> contactDTOs) {
+        List<Contact> Listcontacts = new ArrayList<>();
+        for (ContactDTO dto : contactDTOs) {
+            Listcontacts.add(toEntity(dto));
+        }
+        return Listcontacts;
     }
 }
