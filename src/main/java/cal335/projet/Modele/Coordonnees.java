@@ -1,6 +1,6 @@
 package cal335.projet.Modele;
 
-public class Coordonees {
+public class Coordonnees {
     private double latitude;
     private double longitude;
 

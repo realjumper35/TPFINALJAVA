@@ -6,7 +6,7 @@ public class Adresse {
     private String ville;
     private String codePostal;
     private String pays;
-    private Coordonees coordonnees;
+    private Coordonnees coordonnees;
 
     public Integer getid_adresse() {
         return id_adresse;
@@ -48,11 +48,11 @@ public class Adresse {
         this.pays = pays;
     }
 
-    public Coordonees getCoordonnees() {
+    public Coordonnees getCoordonnees() {
         return coordonnees;
     }
 
-    public void setCoordonnees(Coordonees coordonnees) {
+    public void setCoordonnees(Coordonnees coordonnees) {
         this.coordonnees = coordonnees;
     }
 }
