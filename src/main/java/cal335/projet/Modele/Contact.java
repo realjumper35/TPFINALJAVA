@@ -1,5 +1,6 @@
 package cal335.projet.Modele;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Contact {
@@ -7,7 +8,7 @@ public class Contact {
     private String nom;
     private String prenom;
     private boolean isFavoris;
-    private List<Adresse> adresses;
+    private List<Adresse> adresses = new ArrayList<>();
 
     // Getters et Setters
 
@@ -44,11 +45,15 @@ public class Contact {
         isFavoris = favoris;
     }
 
-    public List<Adresse> getAdresses() {
+    public List<Adresse> getListAdresses() {
         return adresses;
     }
 
-    public void setAdresses(List<Adresse> adresses) {
+    public void setAdresse(Adresse adresse) {
+        this.adresses.add(adresse);
+    }
+
+    public void setListAdresses(List<Adresse> adresses) {
         this.adresses = adresses;
     }
 }

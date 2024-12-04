@@ -9,6 +9,10 @@ public class Coordonnees {
         this.longitude = longitude;
     }
 
+    public Coordonnees() {
+
+    }
+
     public double getLatitude() {
         return latitude;
     }

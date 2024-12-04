@@ -47,7 +47,7 @@ public class ContactDAO {
 
         String sql = "SELECT c.id_contact, c.nom, c.prenom, c.is_favoris, " +
                 "a.id_adresse, a.rue, a.ville, a.code_postal, a.pays, " +
-                "co.latitude, co.longitude " +
+                "co.id_coordonnee, co.latitude, co.longitude " +
                 "FROM Contacts c " +
                 "LEFT JOIN Adresse a ON c.id_contact = a.id_contact " +
                 "LEFT JOIN Coordonnee co ON a.id_adresse = co.id_adresse";
@@ -69,15 +69,15 @@ public class ContactDAO {
                     contact.setNom(resultSet.getString("nom"));
                     contact.setPrenom(resultSet.getString("prenom"));
                     contact.setFavoris(resultSet.getBoolean("is_favoris"));
-                    contact.setAdresses(new ArrayList<>());
                     contactMap.put(idContact, contact);
                 }
 
                 // Traiter l'adresse si elle existe
                 int idAdresse = resultSet.getInt("id_adresse");
-                if (!resultSet.wasNull()) { // Vérifie si l'adresse est présente
+                if (!resultSet.wasNull()) {
                     AdresseDTO adresse = new AdresseDTO();
                     adresse.setId_adresse(idAdresse);
+                    adresse.setId_contact(idContact);
                     adresse.setRue(resultSet.getString("rue"));
                     adresse.setVille(resultSet.getString("ville"));
                     adresse.setCodePostal(resultSet.getString("code_postal"));
@@ -87,12 +87,14 @@ public class ContactDAO {
                     double latitude = resultSet.getDouble("latitude");
                     if (!resultSet.wasNull()) {
                         CoordonneesDTO coordonnee = new CoordonneesDTO();
+                        coordonnee.setId_coordonnees(resultSet.getInt("id_coordonnee"));
+                        coordonnee.setId_adresse(idAdresse);
                         coordonnee.setLatitude(latitude);
                         coordonnee.setLongitude(resultSet.getDouble("longitude"));
                         adresse.setCoordonnees(coordonnee);
                     }
 
-                    contact.getAdresses().add(adresse);
+                    contact.setAdresse(adresse);
                 }
             }
 

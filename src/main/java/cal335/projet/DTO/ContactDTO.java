@@ -1,5 +1,6 @@
 package cal335.projet.DTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDTO {
@@ -7,7 +8,19 @@ public class ContactDTO {
     private String nom;
     private String prenom;
     private boolean isFavoris;
-    private List<AdresseDTO> adresses;
+    private  List<AdresseDTO> adresses = new ArrayList<>();
+
+    public ContactDTO() {
+        // Default constructor
+    }
+
+    public ContactDTO(Integer id_contact, String nom, String prenom, boolean isFavoris, ArrayList<AdresseDTO> adresses) {
+        this.id_contact = id_contact;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.isFavoris = isFavoris;
+        this.adresses = adresses;
+    }
 
     // Getters et Setters
     public Integer getId_contact() {
@@ -42,11 +55,16 @@ public class ContactDTO {
         isFavoris = favoris;
     }
 
-    public List<AdresseDTO> getAdresses() {
+    public List<AdresseDTO> getListAdresses() {
         return adresses;
     }
 
-    public void setAdresses(List<AdresseDTO> adresses) {
+
+    public void setAdresse(AdresseDTO adresse) {
+        this.adresses.add(adresse);
+    }
+
+    public void setListAdresses(List<AdresseDTO> adresses) {
         this.adresses = adresses;
     }
 }

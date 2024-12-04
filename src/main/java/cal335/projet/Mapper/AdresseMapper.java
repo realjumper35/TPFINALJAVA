@@ -3,7 +3,27 @@ package cal335.projet.Mapper;
 import cal335.projet.DTO.AdresseDTO;
 import cal335.projet.Modele.Adresse;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AdresseMapper {
+
+    public static List<AdresseDTO> toDTO(List<Adresse> adresses) {
+        List<AdresseDTO> listAdressesDTO = new ArrayList<>();
+        for (Adresse adresse : adresses) {
+            listAdressesDTO.add(toDTO(adresse));
+        }
+        return listAdressesDTO;
+    }
+
+
+    public static List<Adresse> toEntity(List<AdresseDTO> adressesDTO) {
+        List<Adresse> listAdresses = new ArrayList<>();
+        for (AdresseDTO dto : adressesDTO) {
+            listAdresses.add(toEntity(dto));
+        }
+        return listAdresses;
+    }
 
     public static AdresseDTO toDTO(Adresse adresse) {
         AdresseDTO dto = new AdresseDTO();
@@ -12,13 +32,11 @@ public class AdresseMapper {
         dto.setVille(adresse.getVille());
         dto.setCodePostal(adresse.getCodePostal());
         dto.setPays(adresse.getPays());
-        if (adresse.getCoordonnees() != null) {
-//            dto.setCoordonnees(new CoordonneesDTO(
-//                    adresse.getCoordonnees().getLatitude(),
-//                    adresse.getCoordonnees().getLongitude()));
-        }
+        dto.setCoordonnees(CoordonneesMapper.toDTO(adresse.getCoordonnees()));
+
         return dto;
     }
+
 
     public static Adresse toEntity(AdresseDTO dto) {
         Adresse adresse = new Adresse();
@@ -27,11 +45,7 @@ public class AdresseMapper {
         adresse.setVille(dto.getVille());
         adresse.setCodePostal(dto.getCodePostal());
         adresse.setPays(dto.getPays());
-        if (dto.getCoordonnees() != null) {
-//            adresse.setCoordonnees(new Coordonnees(
-//                    dto.getCoordonnees().getLatitude(),
-//                    dto.getCoordonnees().getLongitude()));
-        }
+        adresse.setCoordonnees(CoordonneesMapper.toEntity(dto.getCoordonnees()));
         return adresse;
     }
 }

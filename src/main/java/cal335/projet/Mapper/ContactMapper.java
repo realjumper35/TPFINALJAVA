@@ -14,6 +14,9 @@ public class ContactMapper {
         dto.setNom(contact.getNom());
         dto.setPrenom(contact.getPrenom());
         dto.setFavoris(contact.isFavoris());
+        dto.setListAdresses(contact.getListAdresses().stream()
+                .map(AdresseMapper::toDTO)
+                .collect(Collectors.toList()));
         return dto;
     }
 
@@ -23,11 +26,9 @@ public class ContactMapper {
         contact.setNom(dto.getNom());
         contact.setPrenom(dto.getPrenom());
         contact.setFavoris(dto.isFavoris());
-        if (dto.getAdresses() != null) {
-//            contact.setAdresses(dto.getAdresses().stream()
-//                    .map(ContactMapper::toEntity)
-//                    .collect(Collectors.toList()));
-        }
+        contact.setListAdresses(dto.getListAdresses().stream()
+                .map(AdresseMapper::toEntity)
+                .collect(Collectors.toList()));
         return contact;
     }
 
