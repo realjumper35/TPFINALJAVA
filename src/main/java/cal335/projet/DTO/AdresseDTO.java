@@ -1,19 +1,19 @@
 package cal335.projet.DTO;
 
 public class AdresseDTO {
-    private Integer id_adresse;
+    private int id_adresse;
+    private Integer id_contact;
     private String rue;
     private String ville;
     private String codePostal;
     private String pays;
     private CoordonneesDTO coordonnees;
 
-    // Getters et Setters
-    public Integer getid_adresse() {
+    public int getId_adresse() {
         return id_adresse;
     }
 
-    public void setid_adresse(Integer id_adresse) {
+    public void setId_adresse(int id_adresse) {
         this.id_adresse = id_adresse;
     }
 
@@ -55,6 +55,14 @@ public class AdresseDTO {
 
     public void setCoordonnees(CoordonneesDTO coordonnees) {
         this.coordonnees = coordonnees;
+    }
+
+    public Integer getId_contact() {
+        return id_contact;
+    }
+
+    public void setId_contact(Integer id_contact) {
+        this.id_contact = id_contact;
     }
 
 }

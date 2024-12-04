@@ -10,11 +10,11 @@ public class ContactDTO {
     private List<AdresseDTO> adresses;
 
     // Getters et Setters
-    public Integer getid_contact() {
+    public Integer getId_contact() {
         return id_contact;
     }
 
-    public void setid_contact(Integer id_contact) {
+    public void setId_contact(Integer id_contact) {
         this.id_contact = id_contact;
     }
 

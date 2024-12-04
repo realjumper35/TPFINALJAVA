@@ -5,9 +5,13 @@ import cal335.projet.DTO.CoordonneesDTO;
 import cal335.projet.Modele.Contact;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IContactService {
     List<Contact> obtenirTousLesContacts();
+
+    //    liste des favorie
+//    Map<Integer, Contact> obtenirLesFavoris();
 //    void ajouterContact(ContactDTO contactDTO);
 //
 //    void supprimerContact(Integer id);

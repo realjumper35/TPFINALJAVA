@@ -1,18 +1,19 @@
 package cal335.projet.Modele;
 
 public class Adresse {
-    private Integer id_adresse;
+    private int id_adresse;
+    private int id_contact;
     private String rue;
     private String ville;
     private String codePostal;
     private String pays;
     private Coordonnees coordonnees;
 
-    public Integer getid_adresse() {
+    public int getId_adresse() {
         return id_adresse;
     }
 
-    public void setid_adresse(Integer id_adresse) {
+    public void setId_adresse(int id_adresse) {
         this.id_adresse = id_adresse;
     }
 
@@ -55,4 +56,15 @@ public class Adresse {
     public void setCoordonnees(Coordonnees coordonnees) {
         this.coordonnees = coordonnees;
     }
+
+
+    public int getId_contact() {
+        return id_contact;
+    }
+
+
+    public void setId_contact(int id_contact) {
+        this.id_contact = id_contact;
+    }
+
 }

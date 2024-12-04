@@ -7,7 +7,7 @@ public class AdresseMapper {
 
     public static AdresseDTO toDTO(Adresse adresse) {
         AdresseDTO dto = new AdresseDTO();
-        dto.setid_adresse(adresse.getid_adresse());
+        dto.setId_adresse(adresse.getId_adresse());
         dto.setRue(adresse.getRue());
         dto.setVille(adresse.getVille());
         dto.setCodePostal(adresse.getCodePostal());
@@ -22,7 +22,7 @@ public class AdresseMapper {
 
     public static Adresse toEntity(AdresseDTO dto) {
         Adresse adresse = new Adresse();
-        adresse.setid_adresse(dto.getid_adresse());
+        adresse.setId_adresse(dto.getId_adresse());
         adresse.setRue(dto.getRue());
         adresse.setVille(dto.getVille());
         adresse.setCodePostal(dto.getCodePostal());
