@@ -12,6 +12,9 @@ public interface IContactService {
 
     List<Contact> obtenirLesFavoris();
 
+    //cache fav
+    Map<Integer, Contact> getCacheFavoris();
+
     //    liste des favorie
 //    Map<Integer, Contact> obtenirLesFavoris();
 //    void ajouterContact(ContactDTO contactDTO);
