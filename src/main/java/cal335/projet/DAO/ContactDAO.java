@@ -61,41 +61,36 @@ public class ContactDAO {
             while (resultSet.next()) {
                 int idContact = resultSet.getInt("id_contact");
 
-                // Si le contact n'existe pas encore dans la map, le créer
                 ContactDTO contact = contactMap.get(idContact);
                 if (contact == null) {
                     contact = new ContactDTO();
                     contact.setId_contact(idContact);
                     contact.setNom(resultSet.getString("nom"));
                     contact.setPrenom(resultSet.getString("prenom"));
-                    contact.setFavoris(resultSet.getBoolean("is_favoris"));
+                    contact.setFavoris(Boolean.parseBoolean(resultSet.getString("is_favoris")));
                     contactMap.put(idContact, contact);
                 }
 
-                // Traiter l'adresse si elle existe
                 int idAdresse = resultSet.getInt("id_adresse");
-                if (!resultSet.wasNull()) {
-                    AdresseDTO adresse = new AdresseDTO();
-                    adresse.setId_adresse(idAdresse);
-                    adresse.setId_contact(idContact);
-                    adresse.setRue(resultSet.getString("rue"));
-                    adresse.setVille(resultSet.getString("ville"));
-                    adresse.setCodePostal(resultSet.getString("code_postal"));
-                    adresse.setPays(resultSet.getString("pays"));
+                AdresseDTO adresse = new AdresseDTO();
+                adresse.setId_adresse(idAdresse);
+                adresse.setId_contact(idContact);
+                adresse.setRue(resultSet.getString("rue"));
+                adresse.setVille(resultSet.getString("ville"));
+                adresse.setCodePostal(resultSet.getString("code_postal"));
+                adresse.setPays(resultSet.getString("pays"));
 
-                    // Traiter les coordonnées si elles existent
-                    double latitude = resultSet.getDouble("latitude");
-                    if (!resultSet.wasNull()) {
-                        CoordonneesDTO coordonnee = new CoordonneesDTO();
-                        coordonnee.setId_coordonnees(resultSet.getInt("id_coordonnee"));
-                        coordonnee.setId_adresse(idAdresse);
-                        coordonnee.setLatitude(latitude);
-                        coordonnee.setLongitude(resultSet.getDouble("longitude"));
-                        adresse.setCoordonnees(coordonnee);
-                    }
 
-                    contact.setAdresse(adresse);
-                }
+                double latitude = resultSet.getDouble("latitude");
+                CoordonneesDTO coordonnee = new CoordonneesDTO();
+                coordonnee.setId_coordonnees(resultSet.getInt("id_coordonnee"));
+                coordonnee.setId_adresse(idAdresse);
+                coordonnee.setLatitude(latitude);
+                coordonnee.setLongitude(resultSet.getDouble("longitude"));
+                adresse.setCoordonnees(coordonnee);
+
+                contact.setAdresse(adresse);
+
             }
 
             listeDesContactsDTO.addAll(contactMap.values());
@@ -105,8 +100,6 @@ public class ContactDAO {
 
         return listeDesContactsDTO;
     }
-
-
 
 
     //listdesfavoris

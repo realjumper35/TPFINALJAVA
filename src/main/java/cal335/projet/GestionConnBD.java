@@ -15,15 +15,15 @@ public class GestionConnBD {
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(URL);
-        config.setUsername("");
-        config.setPassword("");
+//        config.setUsername("");
+//        config.setPassword("");
         config.setMaximumPoolSize(10);
         dataSource = new HikariDataSource(config);
     }
 
     private GestionConnBD() {
         try {
-            Connection connexion = DriverManager.getConnection(URL);
+            DriverManager.getConnection(URL);
         } catch (SQLException e) {
             System.err.println("Erreur lors de la connexion à la base de données : " + e.getMessage());
         }
