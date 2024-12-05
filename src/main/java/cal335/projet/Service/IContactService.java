@@ -10,6 +10,8 @@ import java.util.Map;
 public interface IContactService {
     List<Contact> obtenirTousLesContacts();
 
+    List<Contact> obtenirLesFavoris();
+
     //    liste des favorie
 //    Map<Integer, Contact> obtenirLesFavoris();
 //    void ajouterContact(ContactDTO contactDTO);

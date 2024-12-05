@@ -26,8 +26,8 @@ public class ContactControleur implements HttpHandler {
 
             if ("GET".equals(methode) && chemin.equals("/contact/LesContacts")) {
             this.obtenirTousLesContacts(echange);
-        } else if ("POST".equals(methode) && chemin.equals("/taches")) {
-//            this.creerNouvelleTache(echange);
+        } else if ("GET".equals(methode) && chemin.equals("/contact/LesFavoris")) {
+            this.obtenirLesFavoris(echange);
         } else {
             echange.sendResponseHeaders(404, -1);
         }
@@ -36,6 +36,17 @@ public class ContactControleur implements HttpHandler {
     private void obtenirTousLesContacts(HttpExchange echange) throws IOException {
 
         String reponseJson = objectMapper.writeValueAsString(contactService.obtenirTousLesContacts());
+
+        echange.getResponseHeaders().set("Content-Type", "application/json");
+        echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);
+        OutputStream os = echange.getResponseBody();
+        os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
+        os.close();
+    }
+
+    private void obtenirLesFavoris(HttpExchange echange) throws IOException {
+
+        String reponseJson = objectMapper.writeValueAsString(contactService.obtenirLesFavoris());
 
         echange.getResponseHeaders().set("Content-Type", "application/json");
         echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);

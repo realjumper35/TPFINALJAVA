@@ -90,7 +90,6 @@ public class ContactDAO {
                 adresse.setCoordonnees(coordonnee);
 
                 contact.setAdresse(adresse);
-
             }
 
             listeDesContactsDTO.addAll(contactMap.values());
@@ -104,23 +103,66 @@ public class ContactDAO {
 
     //listdesfavoris
     public List<ContactDTO> getListeDesFavoris() {
-        List<ContactDTO> ListeDesFavorisDTO = new ArrayList<>();
+        List<ContactDTO> listeDesFavorisDTO = new ArrayList<>();
+
+        String sql = "SELECT c.id_contact, c.nom, c.prenom, c.is_favoris, " +
+                "a.id_adresse, a.rue, a.ville, a.code_postal, a.pays, " +
+                "co.id_coordonnee, co.latitude, co.longitude " +
+                "FROM Contacts c " +
+                "LEFT JOIN Adresse a ON c.id_contact = a.id_contact " +
+                "LEFT JOIN Coordonnee co ON a.id_adresse = co.id_adresse " +
+                "WHERE c.is_favoris = 'TRUE'";
 
         try (Connection connection = GestionConnBD.getConnexion();
-             PreparedStatement PreparedStatement = connection.prepareStatement("SELECT * FROM Contacts WHERE is_favoris = 1");
-             ResultSet resultSet = PreparedStatement.executeQuery()) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            Map<Integer, ContactDTO> contactMap = new HashMap<>();
+
             while (resultSet.next()) {
-                ContactDTO unContactDTO = new ContactDTO();
-                unContactDTO.setId_contact(resultSet.getInt("id_contact"));
-                unContactDTO.setNom(resultSet.getString("nom"));
-                unContactDTO.setPrenom(resultSet.getString("prenom"));
-                unContactDTO.setFavoris(resultSet.getBoolean("is_favoris"));
-                ListeDesFavorisDTO.add(unContactDTO);
+                int idContact = resultSet.getInt("id_contact");
+
+                ContactDTO contact = contactMap.get(idContact);
+                if (contact == null) {
+                    contact = new ContactDTO();
+                    contact.setId_contact(idContact);
+                    contact.setNom(resultSet.getString("nom"));
+                    contact.setPrenom(resultSet.getString("prenom"));
+                    contact.setFavoris(Boolean.parseBoolean(resultSet.getString("is_favoris")));
+                    contactMap.put(idContact, contact);
+                }
+
+                // Address peut etre null ?
+                int idAdresse = resultSet.getInt("id_adresse");
+
+                    AdresseDTO adresse = new AdresseDTO();
+                    adresse.setId_adresse(idAdresse);
+                    adresse.setId_contact(idContact);
+                    adresse.setRue(resultSet.getString("rue"));
+                    adresse.setVille(resultSet.getString("ville"));
+                    adresse.setCodePostal(resultSet.getString("code_postal"));
+                    adresse.setPays(resultSet.getString("pays"));
+
+
+                    int idCoordonnee = resultSet.getInt("id_coordonnee");
+
+                        CoordonneesDTO coordonnee = new CoordonneesDTO();
+                        coordonnee.setId_coordonnees(idCoordonnee);
+                        coordonnee.setId_adresse(idAdresse);
+                        coordonnee.setLatitude(resultSet.getDouble("latitude"));
+                        coordonnee.setLongitude(resultSet.getDouble("longitude"));
+                        adresse.setCoordonnees(coordonnee);
+
+                    contact.setAdresse(adresse);
             }
+
+
+            listeDesFavorisDTO.addAll(contactMap.values());
         } catch (SQLException e) {
             System.err.println("Erreur lors de l'exécution de la requête : " + e.getMessage());
         }
-        return ListeDesFavorisDTO;
+
+        return listeDesFavorisDTO;
     }
 }
 

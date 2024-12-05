@@ -16,8 +16,8 @@ public class ApplicationCHUMServeur {
 
         IContactService contactService = new ContactService();
 
-        ContactControleur controleur = new ContactControleur(contactService);
-        serveur.createContext("/contact", controleur);
+        ContactControleur ContactControleur = new ContactControleur(contactService);
+        serveur.createContext("/contact", ContactControleur);
         serveur.setExecutor(null);
         serveur.start();
         System.out.println("Serveur démarré sur le port " + PORT);
