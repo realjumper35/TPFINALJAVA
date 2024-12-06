@@ -3,11 +3,11 @@ package cal335.projet.Service;
 import cal335.projet.DAO.ContactDAO;
 import cal335.projet.DTO.ContactDTO;
 import cal335.projet.Mapper.ContactMapper;
+import cal335.projet.Modele.Adresse;
 import cal335.projet.Modele.Contact;
+import cal335.projet.Modele.Coordonnees;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ContactService implements IContactService {
 
@@ -23,10 +23,28 @@ public class ContactService implements IContactService {
         ContactDAO contactDAO = new ContactDAO();
         List<ContactDTO> contactDTOs = contactDAO.getListeDesFavoris();
         return ContactMapper.toEntity(contactDTOs);
+    }
 
+    @Override
+    public void ajouterContact(ContactDTO contactDTO) {
+        Contact contact = ContactMapper.toEntity(contactDTO);
+        for (Adresse adresse : contact.getListAdresses()) {
+            this.obtenirCoordonnees(adresse);
+
+        }
     }
 
 
+    public Coordonnees obtenirCoordonnees(Adresse adresse) {
+        MapBoxService mapBoxService = new MapBoxService();
+        String LAdresse = adresse.getRue() + " " + adresse.getCodePostal() + " " + adresse.getVille();
+        return mapBoxService.obtenirCoordonnees(LAdresse);
+    }
+
+    @Override
+    public void associerCoordonnees(Adresse adresse, Coordonnees coordonnees) {
+        adresse.setCoordonnees(coordonnees);
+    }
 
 
 }

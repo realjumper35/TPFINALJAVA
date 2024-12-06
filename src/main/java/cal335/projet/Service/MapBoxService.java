@@ -1,5 +1,11 @@
 package cal335.projet.Service;
 
+import cal335.projet.DTO.CoordonneesDTO;
+import cal335.projet.Modele.Coordonnees;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -11,9 +17,9 @@ public class MapBoxService {
 //    https://api.mapbox.com/geocoding/v5/mapbox.places/Adresse+ici.json?access_token=VOTRE_CLE_API
 
 
-    public String obtenirCoordonnees(String adresse) {
+    public Coordonnees obtenirCoordonnees(String adresse) {
         String endPoint = API_URL + adresse + ".json?access_token=" + API_token;
-        return envoyerRequete(endPoint);
+        return deserialiserCoordonnees(envoyerRequete(endPoint));
     }
 
 
@@ -38,5 +44,22 @@ public class MapBoxService {
         }
         return reponse.toString();
     }
+
+    protected static Coordonnees deserialiserCoordonnees(String json) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(json);
+            JsonNode coordinatesNode = rootNode.path("features").get(0).path("geometry").path("coordinates");
+
+            double longitude = coordinatesNode.get(0).asDouble();
+            double latitude = coordinatesNode.get(1).asDouble();
+
+            return new Coordonnees(latitude, longitude);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }
