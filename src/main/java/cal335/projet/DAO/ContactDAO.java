@@ -1,9 +1,9 @@
 package cal335.projet.DAO;
-
 import cal335.projet.DTO.AdresseDTO;
 import cal335.projet.DTO.ContactDTO;
 import cal335.projet.DTO.CoordonneesDTO;
 import cal335.projet.GestionConnBD;
+import cal335.projet.Modele.Contact;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ContactDAO {
+public class ContactDAO implements DAOGenerique<ContactDTO> {
     public List<AdresseDTO> getAdressesByContactId(int id_contact) {
         List<AdresseDTO> adresses = new ArrayList<>();
         String query = "SELECT * FROM Adresse WHERE id_contact = ?";
@@ -135,25 +135,25 @@ public class ContactDAO {
                 // Address peut etre null ?
                 int idAdresse = resultSet.getInt("id_adresse");
 
-                    AdresseDTO adresse = new AdresseDTO();
-                    adresse.setId_adresse(idAdresse);
-                    adresse.setId_contact(idContact);
-                    adresse.setRue(resultSet.getString("rue"));
-                    adresse.setVille(resultSet.getString("ville"));
-                    adresse.setCodePostal(resultSet.getString("code_postal"));
-                    adresse.setPays(resultSet.getString("pays"));
+                AdresseDTO adresse = new AdresseDTO();
+                adresse.setId_adresse(idAdresse);
+                adresse.setId_contact(idContact);
+                adresse.setRue(resultSet.getString("rue"));
+                adresse.setVille(resultSet.getString("ville"));
+                adresse.setCodePostal(resultSet.getString("code_postal"));
+                adresse.setPays(resultSet.getString("pays"));
 
 
-                    int idCoordonnee = resultSet.getInt("id_coordonnee");
+                int idCoordonnee = resultSet.getInt("id_coordonnee");
 
-                        CoordonneesDTO coordonnee = new CoordonneesDTO();
-                        coordonnee.setId_coordonnees(idCoordonnee);
-                        coordonnee.setId_adresse(idAdresse);
-                        coordonnee.setLatitude(resultSet.getDouble("latitude"));
-                        coordonnee.setLongitude(resultSet.getDouble("longitude"));
-                        adresse.setCoordonnees(coordonnee);
+                CoordonneesDTO coordonnee = new CoordonneesDTO();
+                coordonnee.setId_coordonnees(idCoordonnee);
+                coordonnee.setId_adresse(idAdresse);
+                coordonnee.setLatitude(resultSet.getDouble("latitude"));
+                coordonnee.setLongitude(resultSet.getDouble("longitude"));
+                adresse.setCoordonnees(coordonnee);
 
-                    contact.setAdresse(adresse);
+                contact.setAdresse(adresse);
             }
 
 
@@ -164,5 +164,85 @@ public class ContactDAO {
 
         return listeDesFavorisDTO;
     }
+
+    @Override
+    public void ajouterContact(ContactDTO contactDTO) {
+        Contact contact = new Contact();
+        contact.setNom(contactDTO.getNom());
+        contact.setPrenom(contactDTO.getPrenom());
+        contact.setFavoris(contactDTO.isFavoris());
+
+
+
+
+        String query = "INSERT INTO Contacts (nom, prenom, is_favoris) VALUES (?, ?, ?)";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, contact.getNom());
+            preparedStatement.setString(2, contact.getPrenom());
+            preparedStatement.setString(3, contact.isFavoris() ? "TRUE" : "FALSE");
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'ajout du contact : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void supprimer(ContactDTO contact) {
+        String query = "DELETE FROM Contacts WHERE id_contact = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, contact.getId_contact());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la suppression du contact : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void mettreAJour(ContactDTO contact) {
+        String query = "UPDATE Contacts SET nom = ?, prenom = ?, is_favoris = ? WHERE id_contact = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, contact.getNom());
+            preparedStatement.setString(2, contact.getPrenom());
+            preparedStatement.setString(3, contact.isFavoris() ? "TRUE" : "FALSE");
+            preparedStatement.setInt(4, contact.getId_contact());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la mise à jour du contact : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ContactDTO trouverParId(Integer id) {
+        ContactDTO contact = null;
+        String query = "SELECT * FROM Contacts WHERE id_contact = ?";
+
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    contact = new ContactDTO();
+                    contact.setId_contact(resultSet.getInt("id_contact"));
+                    contact.setNom(resultSet.getString("nom"));
+                    contact.setPrenom(resultSet.getString("prenom"));
+                    contact.setFavoris(Boolean.parseBoolean(resultSet.getString("is_favoris")));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la recherche du contact : " + e.getMessage());
+        }
+        return contact;
+    }
+
+
 }
 

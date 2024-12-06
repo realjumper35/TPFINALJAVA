@@ -3,7 +3,7 @@ package cal335.projet.DAO;
 public interface DAOGenerique<T> {
 
     // Méthode pour ajouter un objet
-    void ajouter(T objet);
+    void ajouterContact(T objet);
 
     // Méthode pour supprimer un objet
     void supprimer(T objet);
