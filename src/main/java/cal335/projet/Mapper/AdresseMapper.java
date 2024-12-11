@@ -27,7 +27,9 @@ public class AdresseMapper {
 
     public static AdresseDTO toDTO(Adresse adresse) {
         AdresseDTO dto = new AdresseDTO();
-        dto.setId_adresse(adresse.getId_adresse());
+        if (adresse.getId_adresse() != null) {
+            dto.setId_adresse(adresse.getId_adresse());
+        }
         dto.setRue(adresse.getRue());
         dto.setVille(adresse.getVille());
         dto.setCodePostal(adresse.getCodePostal());
@@ -40,12 +42,16 @@ public class AdresseMapper {
 
     public static Adresse toEntity(AdresseDTO dto) {
         Adresse adresse = new Adresse();
-        adresse.setId_adresse(dto.getId_adresse());
+        if (dto.getId_adresse() != null) {
+            adresse.setId_adresse(dto.getId_adresse());
+        }
         adresse.setRue(dto.getRue());
         adresse.setVille(dto.getVille());
         adresse.setCodePostal(dto.getCodePostal());
         adresse.setPays(dto.getPays());
-        adresse.setCoordonnees(CoordonneesMapper.toEntity(dto.getCoordonnees()));
+        if (dto.getCoordonnees() != null) {
+            adresse.setCoordonnees(CoordonneesMapper.toEntity(dto.getCoordonnees()));
+        }
         return adresse;
     }
 }

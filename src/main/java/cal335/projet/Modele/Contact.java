@@ -4,20 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Contact {
-    private int id_contact;
+    private Integer id_contact;
     private String nom;
     private String prenom;
-    private boolean isFavoris;
+    private Boolean isFavoris;
     private List<Adresse> adresses = new ArrayList<>();
 
-    // Getters et Setters
+    public Contact() {
+        // Default constructor
+    }
+
+    public Contact(Integer id_contact, String nom, String prenom, Boolean isFavoris, List<Adresse> adresses) {
+        this.id_contact = id_contact;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.isFavoris = isFavoris;
+        this.adresses = adresses;
+    }
 
 
-    public int getId_contact() {
+    public Integer getId_contact() {
         return id_contact;
     }
 
-    public void setId_contact(int id_contact) {
+    public void setId_contact(Integer id_contact) {
         this.id_contact = id_contact;
     }
 
@@ -37,11 +47,11 @@ public class Contact {
         this.prenom = prenom;
     }
 
-    public boolean isFavoris() {
+    public Boolean isFavoris() {
         return isFavoris;
     }
 
-    public void setFavoris(boolean favoris) {
+    public void setFavoris(Boolean favoris) {
         isFavoris = favoris;
     }
 

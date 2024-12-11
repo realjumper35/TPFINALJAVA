@@ -1,7 +1,7 @@
 package cal335.projet.DTO;
 
 public class AdresseDTO {
-    private int id_adresse;
+    private Integer id_adresse;
     private Integer id_contact;
     private String rue;
     private String ville;
@@ -9,12 +9,34 @@ public class AdresseDTO {
     private String pays;
     private CoordonneesDTO coordonnees;
 
-    public int getId_adresse() {
+    public AdresseDTO() {
+        // Default constructor
+    }
+
+    public AdresseDTO(Integer id_adresse, Integer id_contact, String rue, String ville, String codePostal, String pays, CoordonneesDTO coordonnees) {
+        this.id_adresse = id_adresse;
+        this.id_contact = id_contact;
+        this.rue = rue;
+        this.ville = ville;
+        this.codePostal = codePostal;
+        this.pays = pays;
+        this.coordonnees = coordonnees;
+    }
+
+    public Integer getId_adresse() {
         return id_adresse;
     }
 
-    public void setId_adresse(int id_adresse) {
+    public void setId_adresse(Integer id_adresse) {
         this.id_adresse = id_adresse;
+    }
+
+    public Integer getId_contact() {
+        return id_contact;
+    }
+
+    public void setId_contact(Integer id_contact) {
+        this.id_contact = id_contact;
     }
 
     public String getRue() {
@@ -57,12 +79,6 @@ public class AdresseDTO {
         this.coordonnees = coordonnees;
     }
 
-    public Integer getId_contact() {
-        return id_contact;
-    }
 
-    public void setId_contact(Integer id_contact) {
-        this.id_contact = id_contact;
-    }
 
 }

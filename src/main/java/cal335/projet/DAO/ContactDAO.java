@@ -142,7 +142,7 @@ public class ContactDAO {
     }
 
 
-    public void ajouterContact(Contact contact) {
+    public Contact ajouterContact(Contact contact) {
         String query = "INSERT INTO Contacts (nom, prenom, is_favoris) VALUES (?, ?, ?)";
         try (Connection connection = GestionConnBD.getConnexion();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -159,7 +159,7 @@ public class ContactDAO {
                     int generatedId = generatedKeys.getInt(1);
                     contact.setId_contact(generatedId);
                     for (Adresse adresse : contact.getListAdresses()) {
-                        adresseDAO.ajouterAdresse(adresse, generatedId);
+                        contact.setAdresse(adresseDAO.ajouterAdresse(adresse, generatedId));
                     }
                 }
             } catch (SQLException e) {
@@ -169,6 +169,7 @@ public class ContactDAO {
         } catch (SQLException e) {
             System.err.println("Erreur lors de l'ajout du contact : " + e.getMessage());
         }
+        return contact;
     }
 
 

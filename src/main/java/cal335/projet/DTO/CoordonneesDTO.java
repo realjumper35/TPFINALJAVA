@@ -6,6 +6,16 @@ public class CoordonneesDTO {
     private double latitude;
     private double longitude;
 
+    public CoordonneesDTO() {
+        // Default constructor
+    }
+
+    public CoordonneesDTO(int id_coordonnees, int id_adresse, double latitude, double longitude) {
+        this.id_coordonnees = id_coordonnees;
+        this.id_adresse = id_adresse;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public int getId_coordonnees() {
         return id_coordonnees;

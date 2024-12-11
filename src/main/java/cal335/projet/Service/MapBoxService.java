@@ -49,6 +49,7 @@ public class MapBoxService {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.readTree(json);
+            //if accuracy = rooftop ??
             JsonNode coordinatesNode = rootNode.path("features").get(0).path("geometry").path("coordinates");
 
             double longitude = coordinatesNode.get(0).asDouble();

@@ -26,12 +26,14 @@ public class ContactService implements IContactService {
     }
 
     @Override
-    public void ajouterContact(ContactDTO contactDTO) {
+    public ContactDTO ajouterContact(ContactDTO contactDTO) {
         Contact contact = ContactMapper.toEntity(contactDTO);
         for (Adresse adresse : contact.getListAdresses()) {
-            this.obtenirCoordonnees(adresse);
-
+            Coordonnees coordonnees = obtenirCoordonnees(adresse);
+            associerCoordonnees(adresse, coordonnees);
         }
+        ContactDAO contactDAO = new ContactDAO();
+        return ContactMapper.toDTO(contactDAO.ajouterContact(contact));
     }
 
 

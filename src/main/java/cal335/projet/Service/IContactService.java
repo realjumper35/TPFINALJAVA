@@ -16,7 +16,7 @@ public interface IContactService {
     List<Contact> obtenirLesFavoris();
 
 
-    void ajouterContact(ContactDTO contactDTO);
+    ContactDTO ajouterContact(ContactDTO contactDTO);
 
     Coordonnees obtenirCoordonnees(Adresse adresse);
 

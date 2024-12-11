@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class AdresseDAO {
 
-    public void ajouterAdresse(Adresse adresse, int idContact) {
+    public Adresse ajouterAdresse(Adresse adresse, int idContact) {
         CoordoneesDAO coordoneesDAO = new CoordoneesDAO();
         String query = "INSERT INTO adresse (id_contact, rue, ville, code_postal, pays) VALUES (?, ?, ?, ?, ?)";
 
@@ -27,21 +27,19 @@ public class AdresseDAO {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
-                    adresse.setId_contact(generatedId);
-                    coordoneesDAO.ajouterCoordonnees(adresse.getCoordonnees(), generatedId);
-
+                    adresse.setId_adresse(generatedId);
+                    adresse.setCoordonnees(coordoneesDAO.ajouterCoordonnees(adresse.getCoordonnees(), generatedId));
                 }
             } catch (SQLException e) {
                 System.err.println("Erreur lors de la récupération de l'ID généré : " + e.getMessage());
             }
 
 
-
         } catch (Exception e) {
             System.err.println("Erreur lors de l'ajout de l'adresse : " + e.getMessage());
         }
 
-
+        return adresse;
     }
 
 }
