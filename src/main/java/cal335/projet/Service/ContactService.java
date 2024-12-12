@@ -33,6 +33,7 @@ public class ContactService implements IContactService {
             associerCoordonnees(adresse, coordonnees);
         }
         ContactDAO contactDAO = new ContactDAO();
+
         return ContactMapper.toDTO(contactDAO.ajouterContact(contact));
     }
 

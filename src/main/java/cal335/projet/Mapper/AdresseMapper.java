@@ -30,6 +30,7 @@ public class AdresseMapper {
         if (adresse.getId_adresse() != null) {
             dto.setId_adresse(adresse.getId_adresse());
         }
+        dto.setId_contact(adresse.getId_contact());
         dto.setRue(adresse.getRue());
         dto.setVille(adresse.getVille());
         dto.setCodePostal(adresse.getCodePostal());
@@ -45,6 +46,7 @@ public class AdresseMapper {
         if (dto.getId_adresse() != null) {
             adresse.setId_adresse(dto.getId_adresse());
         }
+        adresse.setId_contact(dto.getId_contact());
         adresse.setRue(dto.getRue());
         adresse.setVille(dto.getVille());
         adresse.setCodePostal(dto.getCodePostal());

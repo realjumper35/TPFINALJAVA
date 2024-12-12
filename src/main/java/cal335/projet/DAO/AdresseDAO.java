@@ -28,6 +28,7 @@ public class AdresseDAO {
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
                     adresse.setId_adresse(generatedId);
+                    adresse.setId_contact(idContact);
                     adresse.setCoordonnees(coordoneesDAO.ajouterCoordonnees(adresse.getCoordonnees(), generatedId));
                 }
             } catch (SQLException e) {

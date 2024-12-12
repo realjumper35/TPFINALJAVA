@@ -66,8 +66,8 @@ public class ContactControleur implements HttpHandler {
 
 
         ContactDTO contactDTO = objectMapper.readValue(echange.getRequestBody(), ContactDTO.class);
-
-        String reponseJson = objectMapper.writeValueAsString(contactService.ajouterContact(contactDTO));
+        ContactDTO contactDTO1 = contactService.ajouterContact(contactDTO);
+        String reponseJson = objectMapper.writeValueAsString(contactDTO1);
 
         echange.getResponseHeaders().set("Content-Type", "application/json");
         echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);

@@ -159,7 +159,7 @@ public class ContactDAO {
                     int generatedId = generatedKeys.getInt(1);
                     contact.setId_contact(generatedId);
                     for (Adresse adresse : contact.getListAdresses()) {
-                        contact.setAdresse(adresseDAO.ajouterAdresse(adresse, generatedId));
+                        adresseDAO.ajouterAdresse(adresse, generatedId);
                     }
                 }
             } catch (SQLException e) {

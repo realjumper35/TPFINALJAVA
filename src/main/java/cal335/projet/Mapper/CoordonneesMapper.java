@@ -10,6 +10,8 @@ public class CoordonneesMapper {
 
         public static CoordonneesDTO toDTO(Coordonnees coordonnes) {
             CoordonneesDTO dto = new CoordonneesDTO();
+            dto.setId_coordonnees(coordonnes.getId_coordonnees());
+            dto.setId_adresse(coordonnes.getId_adresse());
             dto.setLatitude(coordonnes.getLatitude());
             dto.setLongitude(coordonnes.getLongitude());
             return dto;
@@ -17,6 +19,8 @@ public class CoordonneesMapper {
 
         public static Coordonnees toEntity(CoordonneesDTO dto) {
             Coordonnees coordonnes = new Coordonnees();
+            coordonnes.setId_coordonnees(dto.getId_coordonnees());
+            coordonnes.setId_adresse(dto.getId_adresse());
             coordonnes.setLatitude(dto.getLatitude());
             coordonnes.setLongitude(dto.getLongitude());
             return coordonnes;
