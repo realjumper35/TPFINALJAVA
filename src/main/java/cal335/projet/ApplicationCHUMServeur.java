@@ -19,14 +19,16 @@ public class ApplicationCHUMServeur {
     public static void main(String[] args) throws IOException {
         HttpServer serveur = HttpServer.create(new InetSocketAddress(PORT), 0);
 
-        IContactService contactService = new ContactService();
         CacheService cacheService = new CacheService();
+        cacheService.InitCacheFav();
+        IContactService contactService = new ContactService(cacheService);
+        ContactControleur contactControleur = new ContactControleur(contactService);
 
-        ContactControleur ContactControleur = new ContactControleur(contactService);
         //cache fav
-        Map<Integer, Contact> cacheFavoris = cacheService.getCacheFavoris();
 
-        serveur.createContext("/contact", ContactControleur);
+
+
+        serveur.createContext("/contact", contactControleur);
         serveur.setExecutor(null);
         serveur.start();
         System.out.println("Serveur démarré sur le port " + PORT);

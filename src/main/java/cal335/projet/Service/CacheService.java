@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 public class CacheService {
+    Map<Integer, Contact> cacheFavoris = new HashMap<>();
 
-    public Map<Integer, Contact> getCacheFavoris() {
+    public void InitCacheFav() {
         ContactDAO contactDAO = new ContactDAO();
-        HashMap<Integer, Contact> cacheFavoris = new HashMap<>();
         List<Contact> contacts = ContactMapper.toEntity(contactDAO.getListeDesFavoris());
         int iterateur = 0;
         //pour chaque contact ajoute dans hashmap avec chiffre de 0 a n avec contact comme valeur
@@ -20,6 +20,11 @@ public class CacheService {
             cacheFavoris.put(iterateur, contact);
             iterateur++;
         }
-        return cacheFavoris;
     }
+
+    public void ajoutfavCache(Contact contact) {
+        cacheFavoris.put(cacheFavoris.size() + 1, contact);
+    }
+
+
 }

@@ -11,6 +11,12 @@ import java.util.List;
 
 public class ContactService implements IContactService {
 
+    private final CacheService cacheService;
+
+    public ContactService(CacheService cacheService) {
+        this.cacheService = cacheService;
+    }
+
     @Override
     public List<Contact> obtenirTousLesContacts() {
         ContactDAO contactDAO = new ContactDAO();
@@ -34,7 +40,11 @@ public class ContactService implements IContactService {
         }
         ContactDAO contactDAO = new ContactDAO();
 
-        return ContactMapper.toDTO(contactDAO.ajouterContact(contact));
+        ContactDTO newContact = ContactMapper.toDTO(contactDAO.ajouterContact(contact));
+        if (newContact.isFavoris()) {
+            cacheService.ajoutfavCache(contact);
+        }
+        return newContact;
     }
 
 
