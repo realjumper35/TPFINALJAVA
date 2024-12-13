@@ -47,6 +47,20 @@ public class ContactService implements IContactService {
         return newContact;
     }
 
+    @Override
+    public void supprimerContact(ContactDTO contactDTO) {
+        ContactDAO contactDAO = new ContactDAO();
+        try {
+            contactDAO.supprimerContact(ContactMapper.toEntity(contactDTO));
+        } catch (Exception e) {
+            System.out.println("Contact id non trouvé dans contactDAO");
+            System.out.println(e);
+        }
+
+        cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
+
+    }
+
 
     public Coordonnees obtenirCoordonnees(Adresse adresse) {
         MapBoxService mapBoxService = new MapBoxService();

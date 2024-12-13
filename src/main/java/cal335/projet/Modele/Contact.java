@@ -66,4 +66,22 @@ public class Contact {
     public void setListAdresses(List<Adresse> adresses) {
         this.adresses = adresses;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Contact other = (Contact) obj;
+        return this.getId_contact() == other.getId_contact();
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(this.getId_contact());
+    }
+
 }

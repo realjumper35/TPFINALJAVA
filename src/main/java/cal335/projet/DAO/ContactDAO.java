@@ -173,7 +173,7 @@ public class ContactDAO {
     }
 
 
-    public void supprimer(ContactDTO contact) {
+    public void supprimerContact(Contact contact) {
         String query = "DELETE FROM Contacts WHERE id_contact = ?";
         try (Connection connection = GestionConnBD.getConnexion();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {

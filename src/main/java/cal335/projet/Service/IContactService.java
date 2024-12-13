@@ -18,6 +18,9 @@ public interface IContactService {
 
     ContactDTO ajouterContact(ContactDTO contactDTO);
 
+
+    void supprimerContact(ContactDTO contactDTO);
+
     Coordonnees obtenirCoordonnees(Adresse adresse);
 
     void associerCoordonnees(Adresse adresse, Coordonnees coordonnees);

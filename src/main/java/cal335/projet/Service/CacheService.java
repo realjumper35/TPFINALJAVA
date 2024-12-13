@@ -20,11 +20,19 @@ public class CacheService {
             cacheFavoris.put(iterateur, contact);
             iterateur++;
         }
+        //imprimer le nb de favoris
+        System.out.println("Nombre de favoris dans le cache INIT: " + cacheFavoris.size());
     }
 
     public void ajoutfavCache(Contact contact) {
         cacheFavoris.put(cacheFavoris.size() + 1, contact);
+        System.out.println("Nombre de favoris dans le cache APRES AJOUT: " + cacheFavoris.size());
     }
 
+    public void supprimerfavCache(Contact contact) {
+        cacheFavoris.entrySet().removeIf(entry -> entry.getValue().getId_contact().equals(contact.getId_contact()));
+        System.out.println("Nombre de favoris dans le cache APRES SUPPRESSION: " + cacheFavoris.size());
+
+    }
 
 }

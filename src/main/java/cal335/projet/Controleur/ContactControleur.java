@@ -22,20 +22,23 @@ public class ContactControleur implements HttpHandler {
         this.contactService = contactService;
         this.objectMapper = new ObjectMapper();
     }
+
     @Override
     public void handle(HttpExchange echange) throws IOException {
 
         String methode = echange.getRequestMethod();
         String chemin = echange.getRequestURI().getPath();
 
-            if ("GET".equals(methode) && chemin.equals("/contact/LesContacts")) {
+        if ("GET".equals(methode) && chemin.equals("/contact/LesContacts")) {
             this.obtenirTousLesContacts(echange);
         } else if ("GET".equals(methode) && chemin.equals("/contact/LesFavoris")) {
             this.obtenirLesFavoris(echange);
         } else if ("POST".equals(methode) && chemin.equals("/contact/Ajouter")) {
             this.ajouterContact(echange);
+        } else if ("DELETE".equals(methode) && chemin.equals("/contact/Supprimer")) {
+            this.supprimerContact(echange);
 
-        } else {
+        } else{
             echange.sendResponseHeaders(404, -1);
         }
     }
@@ -65,14 +68,19 @@ public class ContactControleur implements HttpHandler {
     private void ajouterContact(HttpExchange echange) throws IOException {
 
         ContactDTO contactDTO = objectMapper.readValue(echange.getRequestBody(), ContactDTO.class);
-        ContactDTO contactDTO1 = contactService.ajouterContact(contactDTO);
-        String reponseJson = objectMapper.writeValueAsString(contactDTO1);
+        String reponseJson = objectMapper.writeValueAsString(contactService.ajouterContact(contactDTO));
 
         echange.getResponseHeaders().set("Content-Type", "application/json");
         echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);
         OutputStream os = echange.getResponseBody();
         os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
         os.close();
+
+    }
+    private void supprimerContact(HttpExchange echange) throws IOException {
+        ContactDTO contactDTO = objectMapper.readValue(echange.getRequestBody(), ContactDTO.class);
+        contactService.supprimerContact(contactDTO);
+        echange.sendResponseHeaders(200, -1);
 
     }
 }
