@@ -64,10 +64,10 @@ public class ContactService implements IContactService {
     public ContactDTO MAJContact(ContactDTO contactDTO) {
         Contact contact = ContactMapper.toEntity(contactDTO);
 
-        for (Adresse adresse : contact.getListAdresses()) {
-            Coordonnees coordonnees = obtenirCoordonnees(adresse);
-            associerCoordonnees(adresse, coordonnees);
-        }
+//        for (Adresse adresse : contact.getListAdresses()) {
+//            Coordonnees coordonnees = obtenirCoordonnees(adresse);
+//            associerCoordonnees(adresse, coordonnees);
+//        }
         ContactDAO contactDAO = new ContactDAO();
         if (contact.isFavoris()) {
             cacheService.ajoutfavCache(contact);
