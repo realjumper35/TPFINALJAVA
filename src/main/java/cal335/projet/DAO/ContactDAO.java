@@ -6,6 +6,7 @@ import cal335.projet.DTO.CoordonneesDTO;
 import cal335.projet.GestionConnBD;
 import cal335.projet.Modele.Adresse;
 import cal335.projet.Modele.Contact;
+import cal335.projet.Modele.Coordonnees;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -186,7 +187,7 @@ public class ContactDAO {
     }
 
 
-    public void mettreAJour(ContactDTO contact) {
+    public Contact MAJContact(Contact contact) {
         String query = "UPDATE Contacts SET nom = ?, prenom = ?, is_favoris = ? WHERE id_contact = ?";
         try (Connection connection = GestionConnBD.getConnexion();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -197,35 +198,41 @@ public class ContactDAO {
             preparedStatement.setInt(4, contact.getId_contact());
 
             preparedStatement.executeUpdate();
+
+//            AdresseDAO adresseDAO = new AdresseDAO();
+//            for (Adresse adresse : contact.getListAdresses()) {
+//                adresseDAO.MAJAdresse(adresse);
+//            }
+
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la mise à jour du contact : " + e.getMessage());
+            System.err.println("Erreur lors de la MAJ du contact : " + e.getMessage());
         }
+        return this.getContact(contact.getId_contact());
     }
 
-//    @Override
-//    public ContactDTO trouverParId(Integer id) {
-//        ContactDTO contact = null;
-//        String query = "SELECT * FROM Contacts WHERE id_contact = ?";
-//
-//        try (Connection connection = GestionConnBD.getConnexion();
-//             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-//            preparedStatement.setInt(1, id);
-//
-//            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//                if (resultSet.next()) {
-//                    contact = new ContactDTO();
-//                    contact.setId_contact(resultSet.getInt("id_contact"));
-//                    contact.setNom(resultSet.getString("nom"));
-//                    contact.setPrenom(resultSet.getString("prenom"));
-//                    contact.setFavoris(Boolean.parseBoolean(resultSet.getString("is_favoris")));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Erreur lors de la recherche du contact : " + e.getMessage());
-//        }
-//        return contact;
-//    }
+    public Contact getContact(int idContact) {
+        Contact contact = new Contact();
 
+        String query = "SELECT * FROM Contacts WHERE id_contact = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, idContact);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    contact.setId_contact(resultSet.getInt("id_contact"));
+                    contact.setNom(resultSet.getString("nom"));
+                    contact.setPrenom(resultSet.getString("prenom"));
+                    contact.setFavoris(Boolean.parseBoolean(resultSet.getString("is_favoris")));
+                    contact.setListAdresses(new AdresseDAO().getAdresse(idContact));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération du contact : " + e.getMessage());
+        }
+        return contact;
+    }
 
 }
 

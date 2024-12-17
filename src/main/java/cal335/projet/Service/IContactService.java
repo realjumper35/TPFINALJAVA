@@ -15,11 +15,13 @@ public interface IContactService {
 
     List<Contact> obtenirLesFavoris();
 
-
     ContactDTO ajouterContact(ContactDTO contactDTO);
 
-
     void supprimerContact(ContactDTO contactDTO);
+
+    ContactDTO MAJContact(ContactDTO contactDTO);
+
+    ContactDTO trouverContactParId(Integer id);
 
     Coordonnees obtenirCoordonnees(Adresse adresse);
 

@@ -56,9 +56,36 @@ public class ContactService implements IContactService {
             System.out.println("Contact id non trouvé dans contactDAO");
             System.out.println(e);
         }
-
         cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
+    }
 
+
+    @Override
+    public ContactDTO MAJContact(ContactDTO contactDTO) {
+        Contact contact = ContactMapper.toEntity(contactDTO);
+
+        for (Adresse adresse : contact.getListAdresses()) {
+            Coordonnees coordonnees = obtenirCoordonnees(adresse);
+            associerCoordonnees(adresse, coordonnees);
+        }
+        ContactDAO contactDAO = new ContactDAO();
+        if (contact.isFavoris()) {
+            cacheService.ajoutfavCache(contact);
+        } else {
+            try {
+                cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
+            } catch (Exception e) {
+                System.out.println("Contact id non trouvé dans cacheService");
+                System.out.println(e);
+            }
+        }
+        return ContactMapper.toDTO(contactDAO.MAJContact(contact));
+    }
+
+    @Override
+    public ContactDTO trouverContactParId(Integer id) {
+        ContactDAO contactDAO = new ContactDAO();
+        return ContactMapper.toDTO(contactDAO.getContact(id));
     }
 
 

@@ -33,4 +33,44 @@ public class CoordoneesDAO {
         }
         return coordonnees;
     }
+
+
+    public Coordonnees MAJCoordonnees(Coordonnees coordonnees) {
+        String query = "UPDATE Coordonnee SET latitude = ?, longitude = ? WHERE id_coordonnee = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setDouble(1, coordonnees.getLatitude());
+            preparedStatement.setDouble(2, coordonnees.getLongitude());
+            preparedStatement.setInt(3, coordonnees.getId_coordonnees());
+
+            preparedStatement.executeUpdate();
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la MAJ des coordonnees : " + e.getMessage());
+        }
+        return coordonnees;
+    }
+
+    public Coordonnees getCoordonnees(int idAdresse) {
+        Coordonnees coordonnees = new Coordonnees();
+        String query = "SELECT * FROM Coordonnee WHERE id_adresse = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, idAdresse);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    coordonnees.setId_coordonnees(resultSet.getInt("id_coordonnee"));
+                    coordonnees.setId_adresse(resultSet.getInt("id_adresse"));
+                    coordonnees.setLatitude(resultSet.getDouble("latitude"));
+                    coordonnees.setLongitude(resultSet.getDouble("longitude"));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des coordonnees : " + e.getMessage());
+        }
+        return coordonnees;
+    }
 }

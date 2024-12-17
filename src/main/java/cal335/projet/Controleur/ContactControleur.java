@@ -37,8 +37,11 @@ public class ContactControleur implements HttpHandler {
             this.ajouterContact(echange);
         } else if ("DELETE".equals(methode) && chemin.equals("/contact/Supprimer")) {
             this.supprimerContact(echange);
-
-        } else{
+        } else if ("PUT".equals(methode) && chemin.equals("/contact/MAJ")) {
+            this.MAJContact(echange);
+        } else if ("GET".equals(methode) && chemin.startsWith("/contact/UnContact/")) {
+            this.obtenirContactParId(echange);
+        } else {
             echange.sendResponseHeaders(404, -1);
         }
     }
@@ -77,10 +80,50 @@ public class ContactControleur implements HttpHandler {
         os.close();
 
     }
+
     private void supprimerContact(HttpExchange echange) throws IOException {
         ContactDTO contactDTO = objectMapper.readValue(echange.getRequestBody(), ContactDTO.class);
         contactService.supprimerContact(contactDTO);
         echange.sendResponseHeaders(200, -1);
 
+    }
+
+    private void MAJContact(HttpExchange echange) throws IOException {
+        ContactDTO contactDTO = objectMapper.readValue(echange.getRequestBody(), ContactDTO.class);
+        String reponseJson = objectMapper.writeValueAsString(contactService.MAJContact(contactDTO));
+
+        echange.getResponseHeaders().set("Content-Type", "application/json");
+        echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);
+        OutputStream os = echange.getResponseBody();
+        os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
+        os.close();
+    }
+
+    private void obtenirContactParId(HttpExchange echange) throws IOException {
+        String chemin = echange.getRequestURI().getPath();
+        String[] segments = chemin.split("/");
+
+        if (segments.length == 4 && "UnContact".equals(segments[2])) {
+            try {
+                int id = Integer.parseInt(segments[3]);
+                System.out.println("ID: " + id);
+                ContactDTO contactDTO = contactService.trouverContactParId(id);
+
+                if (contactDTO != null) {
+                    String reponseJson = objectMapper.writeValueAsString(contactDTO);
+                    echange.getResponseHeaders().set("Content-Type", "application/json");
+                    echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);
+                    OutputStream os = echange.getResponseBody();
+                    os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
+                    os.close();
+                } else {
+                    echange.sendResponseHeaders(404, -1); // Contact non trouvé
+                }
+            } catch (NumberFormatException e) {
+                echange.sendResponseHeaders(400, -1); // Mauvais format de l'ID
+            }
+        } else {
+            echange.sendResponseHeaders(400, -1); // Mauvais format de requête
+        }
     }
 }
