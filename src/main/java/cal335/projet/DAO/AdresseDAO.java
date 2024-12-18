@@ -94,5 +94,32 @@ public class AdresseDAO {
         }
         return adresses;
     }
+    public Adresse getAdresseById(int idAdresse) {
+        CoordoneesDAO coordoneesDAO = new CoordoneesDAO();
+        Adresse adresse = new Adresse();
+        String query = "SELECT * FROM adresse WHERE id_adresse = ?";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, idAdresse);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    adresse.setId_adresse(resultSet.getInt("id_adresse"));
+                    adresse.setId_contact(resultSet.getInt("id_contact"));
+                    adresse.setRue(resultSet.getString("rue"));
+                    adresse.setVille(resultSet.getString("ville"));
+                    adresse.setCodePostal(resultSet.getString("code_postal"));
+                    adresse.setPays(resultSet.getString("pays"));
+                    adresse.setCoordonnees(coordoneesDAO.getCoordonnees(adresse.getId_adresse()));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des adresses : " + e.getMessage());
+        }
+        return adresse;
+    }
+
+
 
 }

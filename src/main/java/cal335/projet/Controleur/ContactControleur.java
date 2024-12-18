@@ -1,5 +1,6 @@
 package cal335.projet.Controleur;
 
+import cal335.projet.DTO.AdresseDTO;
 import cal335.projet.DTO.ContactDTO;
 import cal335.projet.Service.ContactService;
 import cal335.projet.Service.IContactService;
@@ -41,10 +42,16 @@ public class ContactControleur implements HttpHandler {
             this.MAJContact(echange);
         } else if ("GET".equals(methode) && chemin.startsWith("/contact/UnContact/")) {
             this.obtenirContactParId(echange);
+        }else if ("GET".equals(methode) && chemin.equals("/contact/Aproxi")) {
+            this.obtenirContactProche(echange);
+
+
         } else {
             echange.sendResponseHeaders(404, -1);
         }
     }
+
+
 
     private void obtenirTousLesContacts(HttpExchange echange) throws IOException {
 
@@ -117,13 +124,28 @@ public class ContactControleur implements HttpHandler {
                     os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
                     os.close();
                 } else {
-                    echange.sendResponseHeaders(404, -1); // Contact non trouvé
+                    echange.sendResponseHeaders(404, -1);
                 }
             } catch (NumberFormatException e) {
-                echange.sendResponseHeaders(400, -1); // Mauvais format de l'ID
+                echange.sendResponseHeaders(400, -1);
             }
         } else {
-            echange.sendResponseHeaders(400, -1); // Mauvais format de requête
+            echange.sendResponseHeaders(400, -1);
         }
     }
+
+   private void obtenirContactProche(HttpExchange echange) throws IOException {
+    try {
+        AdresseDTO adresseDTO = objectMapper.readValue(echange.getRequestBody(), AdresseDTO.class);
+        String reponseJson = objectMapper.writeValueAsString(contactService.rechercherContactsProches(adresseDTO));
+
+        echange.getResponseHeaders().set("Content-Type", "application/json");
+        echange.sendResponseHeaders(200, reponseJson.getBytes(StandardCharsets.UTF_8).length);
+        OutputStream os = echange.getResponseBody();
+        os.write(reponseJson.getBytes(StandardCharsets.UTF_8));
+        os.close();
+    } catch (IOException e) {
+        echange.sendResponseHeaders(500, -1);
+    }
+}
 }

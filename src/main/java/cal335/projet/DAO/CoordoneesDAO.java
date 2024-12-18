@@ -6,6 +6,8 @@ import cal335.projet.Modele.Coordonnees;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CoordoneesDAO {
 
@@ -65,6 +67,28 @@ public class CoordoneesDAO {
                     coordonnees.setId_adresse(resultSet.getInt("id_adresse"));
                     coordonnees.setLatitude(resultSet.getDouble("latitude"));
                     coordonnees.setLongitude(resultSet.getDouble("longitude"));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des coordonnees : " + e.getMessage());
+        }
+        return coordonnees;
+    }
+
+    public List<Coordonnees> getListeCoordonnees() {
+        List<Coordonnees> coordonnees = new ArrayList<>();
+        String query = "SELECT * FROM Coordonnee";
+        try (Connection connection = GestionConnBD.getConnexion();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Coordonnees coordonnee = new Coordonnees();
+                    coordonnee.setId_coordonnees(resultSet.getInt("id_coordonnee"));
+                    coordonnee.setId_adresse(resultSet.getInt("id_adresse"));
+                    coordonnee.setLatitude(resultSet.getDouble("latitude"));
+                    coordonnee.setLongitude(resultSet.getDouble("longitude"));
+                    coordonnees.add(coordonnee);
                 }
             }
 

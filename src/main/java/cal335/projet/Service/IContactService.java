@@ -23,24 +23,10 @@ public interface IContactService {
 
     ContactDTO trouverContactParId(Integer id);
 
+    List<ContactDTO> rechercherContactsProches(AdresseDTO adresseDTO);
+
     Coordonnees obtenirCoordonnees(Adresse adresse);
 
     void associerCoordonnees(Adresse adresse, Coordonnees coordonnees);
 
-
-    //    liste des favorie
-//    Map<Integer, Contact> obtenirLesFavoris();
-//    void ajouterContact(ContactDTO contactDTO);
-//
-//    void supprimerContact(Integer id);
-//
-//    void mettreAJourContact(ContactDTO contactDTO);
-//
-//    ContactDTO trouverContactParId(Integer id);
-//
-//    List<ContactDTO> rechercherContactsProches(CoordonneesDTO coordonnees, double rayon);
-//
-//    void marquerCommeFavori(Integer id);
-//
-//    void retirerDesFavoris(Integer id);
 }

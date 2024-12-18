@@ -1,12 +1,17 @@
 package cal335.projet.Service;
 
+import cal335.projet.DAO.AdresseDAO;
 import cal335.projet.DAO.ContactDAO;
+import cal335.projet.DAO.CoordoneesDAO;
+import cal335.projet.DTO.AdresseDTO;
 import cal335.projet.DTO.ContactDTO;
+import cal335.projet.Mapper.AdresseMapper;
 import cal335.projet.Mapper.ContactMapper;
 import cal335.projet.Modele.Adresse;
 import cal335.projet.Modele.Contact;
 import cal335.projet.Modele.Coordonnees;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactService implements IContactService {
@@ -86,6 +91,30 @@ public class ContactService implements IContactService {
     public ContactDTO trouverContactParId(Integer id) {
         ContactDAO contactDAO = new ContactDAO();
         return ContactMapper.toDTO(contactDAO.getContact(id));
+    }
+
+    @Override
+    public List<ContactDTO> rechercherContactsProches(AdresseDTO adresseDTO) {
+        CoordoneesDAO coordoneesDAO = new CoordoneesDAO();
+        CalculateurDistance calculateurDistance = new CalculateurDistance();
+        List<ContactDTO> listeContactsProche = new ArrayList<>();
+        Coordonnees coordonneesUtilisateur = this.obtenirCoordonnees(AdresseMapper.toEntity(adresseDTO));
+        List<Coordonnees> listeCoordonnees = coordoneesDAO.getListeCoordonnees();
+
+        for (Coordonnees coordonnee : listeCoordonnees) {
+            if (calculateurDistance.calculerDistance(coordonneesUtilisateur, coordonnee) <= 5) {
+                AdresseDAO adresseDAO = new AdresseDAO();
+                ContactDAO contactDAO = new ContactDAO();
+
+                Adresse adresse = adresseDAO.getAdresseById(coordonnee.getId_adresse());
+                Contact contact = contactDAO.getContact(adresse.getId_contact());
+                listeContactsProche.add(ContactMapper.toDTO(contact));
+
+
+            }
+        }
+
+        return listeContactsProche;
     }
 
 
