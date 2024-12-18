@@ -2,20 +2,15 @@ package cal335.projet.DAO;
 
 import cal335.projet.Modele.Contact;
 
+import java.util.List;
+
 public interface DAOGenerique<T> {
-
-    // Méthode pour ajouter un objet
-    void ajouterContact(T objet);
-
-    void ajouterContact(Contact contact);
-
-    // Méthode pour supprimer un objet
-    void supprimer(T objet);
-
-    // Méthode pour mettre à jour un objet
-    void mettreAJour(T objet);
-
-    // Méthode pour trouver un objet par son ID
+    T ajouter(T t);
+    void supprimer(T t);
+    T mettreAJour(T t);
     T trouverParId(Integer id);
+    List<T> trouverTous();
+
+
 }
 

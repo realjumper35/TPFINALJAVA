@@ -14,7 +14,7 @@ public class CalculateurDistance {
                         Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = rayonTerre * c; // Distance en kilomètres
-        return distance;// retourne la distance en kilomètres
+        // Distance en kilomètres
+        return rayonTerre * c;// retourne la distance en kilomètres
     }
 }

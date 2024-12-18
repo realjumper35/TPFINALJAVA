@@ -57,11 +57,12 @@ public class ContactService implements IContactService {
         ContactDAO contactDAO = new ContactDAO();
         try {
             contactDAO.supprimerContact(ContactMapper.toEntity(contactDTO));
+            cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
         } catch (Exception e) {
             System.out.println("Contact id non trouvé dans contactDAO");
             System.out.println(e);
         }
-        cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
+
     }
 
 
@@ -74,17 +75,25 @@ public class ContactService implements IContactService {
 //            associerCoordonnees(adresse, coordonnees);
 //        }
         ContactDAO contactDAO = new ContactDAO();
-        if (contact.isFavoris()) {
-            cacheService.ajoutfavCache(contact);
-        } else {
-            try {
-                cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
-            } catch (Exception e) {
-                System.out.println("Contact id non trouvé dans cacheService");
-                System.out.println(e);
+        ContactDTO contactMaj = new ContactDTO();
+        try {
+            contactMaj = ContactMapper.toDTO(contactDAO.MAJContact(contact));
+            if (contact.isFavoris()) {
+                cacheService.ajoutfavCache(contact);
+            } else {
+                try {
+                    cacheService.supprimerfavCache(ContactMapper.toEntity(contactDTO));
+                } catch (Exception e) {
+                    System.out.println("Contact id non trouvé dans cacheService");
+                    System.out.println(e);
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Contact id non trouvé dans contactDAO");
+            System.out.println(e);
         }
-        return ContactMapper.toDTO(contactDAO.MAJContact(contact));
+
+        return contactMaj;
     }
 
     @Override
